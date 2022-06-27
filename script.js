@@ -30,7 +30,8 @@ function operateCaller(expressionList, idx) {
 }
 
 function orderDecider(e) {
-  const expressionList = displayDiv.textContent.split(' ');
+  expression += displayDiv.textContent
+  const expressionList = expression.split(' ');
 
   let idx;
   while (expressionList.length > 1) {
@@ -60,42 +61,78 @@ function orderDecider(e) {
     }
   }
 
-  displayDiv.textContent = expressionList[0];
+  displayDiv.textContent = Math.round(expressionList[0] * 100) / 100;
 }
 
 
 function addNum(e) {
+  if (displayDiv.textContent.charAt(displayDiv.textContent.length-3) == '.') {
+    return;
+  }
   const num = e.target.textContent;
   displayDiv.textContent += num;
 }
 
-function addoperator(e) {
+function addOperator(e) {
   if (displayDiv.textContent.length == 0 || 
       displayDiv.textContent[displayDiv.textContent.length-1] == ' ') {
     return;
   }
+  expression += displayDiv.textContent
+  displayDiv.textContent = '';
+
   const operator = e.target.textContent;
-  displayDiv.textContent += ' ' + operator + ' ';
+  expression += ' ' + operator + ' ';
 }
 
 function clearDisplay(e) {
+  expression = ''
   displayDiv.textContent = '';
 }
 
+function deleteExpression(e) {
+  displayDiv.textContent = displayDiv.textContent.slice(0, 
+                                        displayDiv.textContent.length-1);
+}
+
+function changeSign(e) {
+  if (+displayDiv.textContent > 0) {
+    displayDiv.textContent = '-' + displayDiv.textContent;
+  } else if (+displayDiv.textContent < 0) {
+    displayDiv.textContent = displayDiv.textContent.slice(1);
+  }
+}
+
+function addDecimal(e) {
+  if (displayDiv.textContent.indexOf('.') == -1) {
+    displayDiv.textContent+= '.';
+  }
+}
+
+let expression = '';
 const displayDiv = document.querySelector('#display');
 const numButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
 const equaltoButton = document.querySelector('#equalto');
 const clearButton = document.querySelector('#clear');
+const deleteButton = document.querySelector('#delete');
+const signButton = document.querySelector('#sign');
+const decimalButton = document.querySelector('#decimal');
 
 numButtons.forEach(button => {
   button.addEventListener('click', addNum);
 });
 
 operatorButtons.forEach(button => {
-  button.addEventListener('click', addoperator);
+  button.addEventListener('click', addOperator);
 });
 
-equaltoButton.addEventListener('click', orderDecider)
+equaltoButton.addEventListener('click', orderDecider);
 
-clearButton.addEventListener('click', clearDisplay)
+clearButton.addEventListener('click', clearDisplay);
+
+deleteButton.addEventListener('click', deleteExpression);
+
+signButton.addEventListener('click', changeSign);
+
+decimalButton.addEventListener('click', addDecimal)
