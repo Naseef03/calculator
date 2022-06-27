@@ -29,9 +29,19 @@ function addoperator(e) {
   displayDiv.textContent += ' ' + operator + ' ';
 }
 
+function operateCaller(e) {
+  const expressionList = displayDiv.textContent.split(' ');
+  const a = expressionList[0];
+  const b = expressionList[2];
+  const operator = expressionList[1];
+
+  displayDiv.textContent = operate(operator, a, b);
+}
+
 const displayDiv = document.querySelector('#display');
 const numButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
+const equaltoButton = document.querySelector('#equalto');
 
 numButtons.forEach(button => {
   button.addEventListener('click', addNum);
@@ -40,3 +50,5 @@ numButtons.forEach(button => {
 operatorButtons.forEach(button => {
   button.addEventListener('click', addoperator);
 });
+
+equaltoButton.addEventListener('click', operateCaller)
