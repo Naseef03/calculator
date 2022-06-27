@@ -19,6 +19,50 @@ function operate(operator, a, b) {
 }
 
 
+function operateCaller(expressionList, idx) {
+  const list = expressionList.splice(idx-1, 3);
+
+  const a = +list[0];
+  const b = +list[2];
+  const operator = list[1];
+
+  expressionList.splice(idx-1, 0, operate(operator, a, b));
+}
+
+function orderDecider(e) {
+  const expressionList = displayDiv.textContent.split(' ');
+
+  let idx;
+  while (expressionList.length > 1) {
+    idx = expressionList.findIndex(elem => elem == '/');
+    if (idx != -1) {
+      operateCaller(expressionList, idx);
+      continue;
+    }
+    
+    idx = expressionList.findIndex(elem => elem == 'x');
+    if (idx != -1) {
+      operateCaller(expressionList, idx);
+      continue;
+    }
+
+    idx = expressionList.findIndex(elem => elem == '+');
+    if (idx != -1) {
+      operateCaller(expressionList, idx);
+      continue;
+    }
+
+    idx = expressionList.findIndex(elem => elem == '-');
+    if (idx != -1) {
+      operateCaller(expressionList, idx);
+      continue;
+    }
+  }
+
+  displayDiv.textContent = expressionList[0];
+}
+
+
 function addNum(e) {
   const num = e.target.textContent;
   displayDiv.textContent += num;
@@ -27,15 +71,6 @@ function addNum(e) {
 function addoperator(e) {
   const operator = e.target.textContent;
   displayDiv.textContent += ' ' + operator + ' ';
-}
-
-function operateCaller(e) {
-  const expressionList = displayDiv.textContent.split(' ');
-  const a = expressionList[0];
-  const b = expressionList[2];
-  const operator = expressionList[1];
-
-  displayDiv.textContent = operate(operator, a, b);
 }
 
 const displayDiv = document.querySelector('#display');
@@ -51,4 +86,4 @@ operatorButtons.forEach(button => {
   button.addEventListener('click', addoperator);
 });
 
-equaltoButton.addEventListener('click', operateCaller)
+equaltoButton.addEventListener('click', orderDecider)
