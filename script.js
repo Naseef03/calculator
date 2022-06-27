@@ -34,24 +34,25 @@ function orderDecider(e) {
 
   let idx;
   while (expressionList.length > 1) {
+    // check for dividing expression
     idx = expressionList.findIndex(elem => elem == '/');
     if (idx != -1) {
       operateCaller(expressionList, idx);
       continue;
     }
-    
+    // check for multiplying expression
     idx = expressionList.findIndex(elem => elem == 'x');
     if (idx != -1) {
       operateCaller(expressionList, idx);
       continue;
     }
-
+    // check for addition expression
     idx = expressionList.findIndex(elem => elem == '+');
     if (idx != -1) {
       operateCaller(expressionList, idx);
       continue;
     }
-
+    // check for subtraction expression
     idx = expressionList.findIndex(elem => elem == '-');
     if (idx != -1) {
       operateCaller(expressionList, idx);
@@ -69,14 +70,23 @@ function addNum(e) {
 }
 
 function addoperator(e) {
+  if (displayDiv.textContent.length == 0 || 
+      displayDiv.textContent[displayDiv.textContent.length-1] == ' ') {
+    return;
+  }
   const operator = e.target.textContent;
   displayDiv.textContent += ' ' + operator + ' ';
+}
+
+function clearDisplay(e) {
+  displayDiv.textContent = '';
 }
 
 const displayDiv = document.querySelector('#display');
 const numButtons = document.querySelectorAll('.number');
 const operatorButtons = document.querySelectorAll('.operator');
 const equaltoButton = document.querySelector('#equalto');
+const clearButton = document.querySelector('#clear');
 
 numButtons.forEach(button => {
   button.addEventListener('click', addNum);
@@ -87,3 +97,5 @@ operatorButtons.forEach(button => {
 });
 
 equaltoButton.addEventListener('click', orderDecider)
+
+clearButton.addEventListener('click', clearDisplay)
